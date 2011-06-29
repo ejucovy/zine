@@ -9,7 +9,7 @@
     Get a WSGI Application
     ======================
 
-    To get the WSGI application for Zine you can use the `make_app`
+    To get the WSGI application for Zine you can use the `get_wsgi_app`
     function.  This function can either create a dispatcher for one instance
     or for multiple application instances where the current active instance
     is looked up in the WSGI environment.  The latter is useful for mass
