@@ -1,0 +1,8 @@
+Name: OpenCore Auth
+Plugin URL: http://www.coactivate.org
+Author: Ethan Jucovy <opencore-dev@lists.coactivate.org>
+Author URL: http://www.coactivate.org
+License: BSD
+Version: 0.1
+Description: This plugin implements OpenCore authentication by overriding 
+ the Request.get_user method, and adding per-request Groups to the User.
