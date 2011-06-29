@@ -23,7 +23,7 @@ from babel import Locale
 
 from jinja2 import Environment, BaseLoader, TemplateNotFound
 
-from sqlalchemy.exceptions import SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError
 
 from werkzeug import Request as RequestBase, Response as ResponseBase, \
      SharedDataMiddleware, url_quote, routing, redirect as _redirect, \
