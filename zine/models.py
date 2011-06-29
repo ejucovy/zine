@@ -215,6 +215,10 @@ class User(object):
         self.extra = {}
         self.display_name = u'$username'
         self.is_author = is_author
+        # This attribute will contain extra user groups
+        # attached to the current request, rather than
+        # persisted in the database.
+        self.request_groups = []
 
     @property
     def is_manager(self):
@@ -242,6 +246,8 @@ class User(object):
         """A read-only set with all privileges."""
         result = set(self.own_privileges)
         for group in self.groups:
+            result.update(group.privileges)
+        for group in self.request_groups:
             result.update(group.privileges)
         return frozenset(result)
 
