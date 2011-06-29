@@ -215,10 +215,6 @@ class User(object):
         self.extra = {}
         self.display_name = u'$username'
         self.is_author = is_author
-        # This attribute will contain extra user groups
-        # attached to the current request, rather than
-        # persisted in the database.
-        self.request_groups = []
 
     @property
     def is_manager(self):
@@ -240,6 +236,13 @@ class User(object):
 
     display_name = property(_get_display_name, _set_display_name)
     own_privileges = privilege_attribute('_own_privileges')
+
+    _request_groups = None
+    def _set_request_groups(self, groups):
+        self._request_groups = groups
+    def _get_request_groups(self):
+        return self._request_groups or []
+    request_groups = property(_get_request_groups, _set_request_groups)
 
     @property
     def privileges(self):
