@@ -1,0 +1,10 @@
+Werkzeug
+Jinja2
+MySQL-python
+SQLAlchemy==0.6.8
+simplejson
+pytz
+Babel
+lxml
+html5lib
+sqlalchemy-migrate
