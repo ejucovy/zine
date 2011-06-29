@@ -270,9 +270,9 @@ class Request(RequestBase):
         cookie_name = app.cfg['session_cookie_name']
         self.session = SecureCookie.load_cookie(self, cookie_name,
                                                 app.secret_key)
-        self.session = session
         user = self.get_user()
         if user is None:
+            from zine.models import User
             user = User.query.get_nobody()        
         self.user = user
 
