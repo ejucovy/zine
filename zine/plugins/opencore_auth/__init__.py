@@ -20,4 +20,4 @@ class Request(BaseRequest):
         #self.user.request_groups.append(...)
 
 def setup(app, plugin):
-    app.add_parser('creole', CreoleParser)
+    app._request_class = Request
