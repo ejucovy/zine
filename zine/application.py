@@ -267,20 +267,27 @@ class Request(RequestBase):
         engine = self.app.database_engine
 
         # get the session and try to get the user object for this request.
+        cookie_name = app.cfg['session_cookie_name']
+        self.session = SecureCookie.load_cookie(self, cookie_name,
+                                                app.secret_key)
+        self.session = session
+        user = self.get_user()
+        if user is None:
+            user = User.query.get_nobody()        
+        self.user = user
+
+    def get_user(self):
+        """
+        Return the User object for the current request, or None
+        """
         from zine.models import User
         user = None
-        cookie_name = app.cfg['session_cookie_name']
-        session = SecureCookie.load_cookie(self, cookie_name,
-                                           app.secret_key)
-        user_id = session.get('uid')
+        user_id = self.session.get('uid')
         if user_id:
             user = User.query.options(db.eagerload('groups'),
                                       db.eagerload('groups', '_privileges')) \
                              .get(user_id)
-        if user is None:
-            user = User.query.get_nobody()
-        self.user = user
-        self.session = session
+        return user
 
     @property
     def is_behind_proxy(self):
