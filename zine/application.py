@@ -643,7 +643,9 @@ class Zine(object):
     one of the dispatchers created by :func:`zine._core.get_wsgi_app`.
     """
 
+    _request_class = Request
     _setup_only = []
+
     def setuponly(f, container=_setup_only):
         """Mark a function as "setup only".  After the setup those
         functions will be replaced with a dummy function that raises
@@ -1399,7 +1401,7 @@ class Zine(object):
         # and all the other stuff on the current thread but initialize
         # it afterwards.  We do this so that the request object can query
         # the database in the initialization method.
-        request = object.__new__(Request)
+        request = object.__new__(self._request_class)
         local.request = request
         local.page_metadata = []
         local.request_locals = {}
