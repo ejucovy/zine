@@ -13,18 +13,36 @@ import sys
 from os.path import abspath, join, pardir, isfile, dirname
 from optparse import OptionParser
 from werkzeug import run_simple, Response, DispatcherMiddleware
-
+from webob import Request
 
 sys.path.append(dirname(__file__))
 from _init_zine import find_instance
 from zine._core import setup, _unload_zine, InstanceNotInitialized
 
 def zine_farm(environ, start_response):
+    req = Request(environ)
+    path = req.path_info_peek()
+    if not path:
+        return Response('''
+    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+    <title>Index of Blogs</title>
+    <h2>Available blogs</h2>
+    <p>
+      This will list the blogs you have.
+    </p>
+    ''', mimetype='text/html')(environ, start_response)        
+
     project = environ['HTTP_X_OPENPLANS_PROJECT']
-    instance = 'var/instances/%s' % project
+    instance = 'var/instances/%s/%s' % (project, path)
+    req.path_info_pop()
     try:
         return setup(instance)(environ, start_response)
     except InstanceNotInitialized:
+        import os
+        if not os.path.exists(instance):
+            os.makedirs(instance)
+        from zine.websetup import WebSetup
+        return WebSetup(instance)(environ, start_response)
         return Response('''
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
     <title>Page Not Found</title>
